@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "start:api": "npm run --prefix api start:dev",
-    "start:client": "npm run --prefix client start:dev"
+    "start:client": "npm run --prefix client start:dev",
+    "test:api": "npm run --prefix api test"
   },
   "author": "Sepp Wikramaratna-Clarke",
   "workspaces": [
