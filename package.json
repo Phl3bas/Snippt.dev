@@ -1,0 +1,13 @@
+{
+  "name": "snippt",
+  "version": "0.0.1",
+  "scripts": {
+    "start:api": "npm run --prefix api start:dev",
+    "start:client": "npm run --prefix client start:dev"
+  },
+  "author": "Sepp Wikramaratna-Clarke",
+  "workspaces": [
+    "api",
+    "client"
+  ]
+}
