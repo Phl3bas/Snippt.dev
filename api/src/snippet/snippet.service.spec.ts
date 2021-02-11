@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateSnippetInput } from './dto/input/createSnippet.input';
 import { SnippetService } from './snippet.service';
 
 describe('SnippetService', () => {
