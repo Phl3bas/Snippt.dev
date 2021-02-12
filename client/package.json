@@ -1,7 +1,8 @@
 {
   "name": "client",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.0.1",
+  "description": "",
+  "author": "Sepp Wikramaratna-Clarke(phl3bas87@gmail.com)",
   "scripts": {
     "start:dev": "next dev",
     "build": "next build",
