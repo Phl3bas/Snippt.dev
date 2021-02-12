@@ -2,9 +2,8 @@
   "name": "api",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Sepp Wikramaratna-Clarke(phl3bas87@gmail.com)",
   "private": true,
-  "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
