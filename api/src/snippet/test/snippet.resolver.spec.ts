@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SnippetResolver } from './snippet.resolver';
-import { SnippetService } from './snippet.service';
+import { SnippetResolver } from '../snippet.resolver';
+import { SnippetService } from '../snippet.service';
 
 describe('SnippetResolver', () => {
   let resolver: SnippetResolver;

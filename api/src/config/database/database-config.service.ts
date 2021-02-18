@@ -22,4 +22,7 @@ export class DatabaseConfigService {
   get type(): string {
     return this.configService.get<string>('database.type');
   }
+  get autoLoadEntities(): boolean {
+    return this.configService.get<boolean>('database.autoLoadEntities');
+  }
 }

@@ -1,41 +1,47 @@
 import { Injectable } from '@nestjs/common';
-import { Snippet } from './models/snippet.model';
 import { v4 as uuid } from 'uuid';
 import { CreateSnippetInput } from './dto/input/createSnippet.input';
 import { GetSnippetArgs } from './dto/args/get-snippet.args';
-import { GetSnippetsArgs } from './dto/args/get-snippets.args';
+// import { GetSnippetsArgs } from './dto/args/get-snippets.args';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Snippet } from './entities/snippet.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class SnippetService {
-  private snippets: Snippet[] = [];
+  constructor(
+    @InjectRepository(Snippet) private snippetRepository: Repository<Snippet>,
+  ) {}
 
   /**
    * createSnippet
    *
    */
-  public createSnippet(createSnippetData: CreateSnippetInput): Snippet {
-    const snippet: Snippet = {
+  public async createSnippet(
+    createSnippetData: CreateSnippetInput,
+  ): Promise<Snippet> {
+    const snippet = this.snippetRepository.create({
       id: uuid(),
-      created_at: new Date(),
+      created_at: new Date().toISOString(),
       ...createSnippetData,
-    };
+    });
 
-    this.snippets = [...this.snippets, snippet];
-
-    return snippet;
+    return await this.snippetRepository.save(snippet);
   }
 
   /**
    * getSnippet
    */
-  public getSnippet(getSnippetArgs: GetSnippetArgs): Snippet {
-    return this.snippets.find((snippet) => snippet.id === getSnippetArgs.id);
+  public async getSnippet(getSnippetArgs: GetSnippetArgs): Promise<Snippet> {
+    return await this.snippetRepository.findOne({
+      id: getSnippetArgs.id,
+    });
   }
 
-  /**
-   * getSnippets
-   */
-  public getSnippets(getSnippetsArgs: GetSnippetsArgs): Snippet[] {
-    return getSnippetsArgs.ids.map((id) => this.getSnippet({ id }));
-  }
+  // /**
+  //  * getSnippets
+  //  */
+  // public async getSnippets(getSnippetsArgs: GetSnippetsArgs): Promise<any> {
+  //   return getSnippetsArgs.ids.map((id) => this.getSnippet({ id }));
+  // }
 }
