@@ -1,9 +1,9 @@
 import { ArgsType, Field } from '@nestjs/graphql';
-import { IsArray } from 'class-validator';
+import { IsUUID } from 'class-validator';
 
 @ArgsType()
 export class GetSnippetsArgs {
   @Field(() => [String])
-  @IsArray()
+  @IsUUID('all', { each: true })
   ids: string[];
 }
