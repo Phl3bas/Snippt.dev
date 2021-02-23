@@ -1,8 +1,6 @@
 import Head from "next/head";
-import Link from "next/link";
 
-export default function Home({ data }: { data: Snippet[] }) {
-  console.log(data);
+export default function Home() {
   return (
     <div>
       <Head>

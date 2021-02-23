@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const routes = [
   {
-    href: "/dashboard",
+    href: "/phl3bas",
     text: "Dashboard",
   },
 ];

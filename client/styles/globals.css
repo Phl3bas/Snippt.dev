@@ -6,3 +6,12 @@ body {
 
   background: var(--tl-grey-000);
 }
+
+.CodeMirror {
+  border-radius: var(--tl-radius-lg);
+  padding: var(--tl-size-10);
+  width: 100%;
+  margin: 0 auto;
+  font-size: var(--tl-size-12);
+  padding-top: var(--tl-size-14);
+}
