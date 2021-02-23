@@ -1,14 +1,9 @@
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useNestServer } from "../../utils";
-import dynamic from "next/dynamic";
+import { CodeEditor } from "../../components";
 import { useState } from "react";
-
-const CodeEditor = dynamic(
-  import("../../components").then((c) => c.Editor),
-  { ssr: false }
-);
 
 export const INDV_SNIPPETS_QUERY = gql`
   query($id: String!) {
@@ -16,6 +11,19 @@ export const INDV_SNIPPETS_QUERY = gql`
       title
       content
       language
+      notes
+    }
+  }
+`;
+
+export const SAVE_SNIPPET_QUERY = gql`
+  mutation($data: CreateSnippetInput!) {
+    createSnippet(createSnippetData: $data) {
+      id
+      title
+      language
+      content
+      notes
     }
   }
 `;
@@ -24,8 +32,18 @@ interface SnippetPageProps {
   snippet: Snippet;
 }
 export default function SnippetPage({ snippet }: SnippetPageProps) {
-  const [content, setContent] = useState(snippet.content);
-  const [language, setlanguage] = useState(snippet.language.toLowerCase());
+  const [data, setData] = useState({
+    content: snippet.content,
+    language: snippet.language,
+    notes: snippet.notes,
+  });
+
+  const [saveSnippet] = useMutation(SAVE_SNIPPET_QUERY);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(JSON.stringify(data, null, 2));
+  };
 
   return (
     <div>
@@ -36,9 +54,14 @@ export default function SnippetPage({ snippet }: SnippetPageProps) {
       <p>
         {snippet.language.charAt(0).toUpperCase() + snippet.language.slice(1)}
       </p>
-      <div>
-        <CodeEditor language={language} value={content} onChange={setContent} />
-      </div>
+      <form>
+        <CodeEditor
+          language={data.language}
+          value={data.content}
+          onChange={setData}
+        />
+        <input type="submit" onClick={handleSubmit} value="Save" />
+      </form>
     </div>
   );
 }

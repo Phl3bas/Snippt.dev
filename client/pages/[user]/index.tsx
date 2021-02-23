@@ -3,6 +3,7 @@ import { SnippetList } from "../../components";
 import * as React from "react";
 import { useNestServer } from "../../utils";
 import Head from "next/head";
+import Link from "next/link";
 
 export const All_SNIPPETS_QUERY = gql`
   query {
@@ -25,11 +26,14 @@ const Dashboard: React.FC<DashboardProps> = ({
   user: string;
 }) => {
   return (
-    <div className="shadow-lg h-25 bg-teal-400 p-10 flex-col mt-16 radius-lg">
+    <div className="shadow-lg h-25 bg-teal-400 p-10 mt-16 radius-lg">
       <Head>
         <title>Snippt.dev | {user}'s dashboard</title>
       </Head>
       <h2>Welcome {user}</h2>
+      <Link href={"/[...user]/new-snippet"} as={`/${user}/new-snippet`}>
+        <a role="button">New Snippet</a>
+      </Link>
       <SnippetList user={user} snippets={data || []} />
     </div>
   );

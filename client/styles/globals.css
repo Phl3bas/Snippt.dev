@@ -3,15 +3,16 @@
 html,
 body {
   padding: 20px;
-
   background: var(--tl-grey-000);
 }
 
 .CodeMirror {
+  height: auto !important;
+  z-index: 0;
   border-radius: var(--tl-radius-lg);
-  padding: var(--tl-size-10);
+  padding: var(--tl-size-13) var(--tl-size-13);
+  padding-top: var(--tl-size-15);
   width: 100%;
   margin: 0 auto;
   font-size: var(--tl-size-12);
-  padding-top: var(--tl-size-14);
 }
