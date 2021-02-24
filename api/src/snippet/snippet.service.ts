@@ -44,7 +44,7 @@ export class SnippetService {
     const result = await this.snippetRepository.delete(deleteSnippetData.id);
     if (result.affected === 0) {
       throw new NotFoundException(
-        `Task with ID: ${deleteSnippetData.id} Not Found!`,
+        `Snippet with ID: ${deleteSnippetData.id} Not Found!`,
       );
     }
 
@@ -52,21 +52,25 @@ export class SnippetService {
   }
 
   /**
-   * name
+   * updateSnippet
    */
   public async updateSnippet(
     updateSnippetData: UpdateSnippetInput,
   ): Promise<Snippet> {
     const { id, ...data } = updateSnippetData;
-
+    // .where('id = :id', { id })
     const result = await this.snippetRepository
       .createQueryBuilder('snippet')
       .update(Snippet)
       .set(data)
-      .where('id = :id', { id })
+      .whereInIds(id)
       .returning(['id', 'content', 'title', 'created_at', 'notes', 'language'])
       .updateEntity(true)
       .execute();
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Snippet with ID: ${id} Not Found!`);
+    }
 
     return result.raw[0];
   }
