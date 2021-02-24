@@ -56,7 +56,8 @@ export default function SnippetPage({ snippet }: SnippetPageProps) {
       </p>
       <form>
         <CodeEditor
-          language={data.language}
+          language={data.language.toLowerCase()}
+          theme="cobalt"
           value={data.content}
           onChange={setData}
         />
