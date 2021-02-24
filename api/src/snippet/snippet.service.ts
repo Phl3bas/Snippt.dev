@@ -6,6 +6,8 @@ import { GetSnippetsArgs } from './dto/args/get-snippets.args';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Snippet } from './entities/snippet.entity';
 import { Repository } from 'typeorm';
+import { DeleteSnippetInput } from './dto/input/deleteSnippetInput';
+import { UpdateSnippetInput } from './dto/input/updateSnippet.input';
 
 @Injectable()
 export class SnippetService {
@@ -34,11 +36,11 @@ export class SnippetService {
   }
 
   /**
-   * name
+   * deleteSnippet
    */
   public async deleteSnippet(
-    deleteSnippetData: GetSnippetArgs,
-  ): Promise<GetSnippetArgs> {
+    deleteSnippetData: DeleteSnippetInput,
+  ): Promise<DeleteSnippetInput> {
     const result = await this.snippetRepository.delete(deleteSnippetData.id);
     if (result.affected === 0) {
       throw new NotFoundException(
@@ -47,6 +49,26 @@ export class SnippetService {
     }
 
     return deleteSnippetData;
+  }
+
+  /**
+   * name
+   */
+  public async updateSnippet(
+    updateSnippetData: UpdateSnippetInput,
+  ): Promise<Snippet> {
+    const { id, ...data } = updateSnippetData;
+
+    const result = await this.snippetRepository
+      .createQueryBuilder('snippet')
+      .update(Snippet)
+      .set(data)
+      .where('id = :id', { id })
+      .returning(['id', 'content', 'title', 'created_at', 'notes', 'language'])
+      .updateEntity(true)
+      .execute();
+
+    return result.raw[0];
   }
 
   /**

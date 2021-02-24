@@ -8,6 +8,7 @@ import { Snippet } from './entities/snippet.entity';
 import { SnippetType } from './models/snippet.type';
 import { DeleteSnippetType } from './models/deleteSnippet.type';
 import { SnippetService } from './snippet.service';
+import { UpdateSnippetInput } from './dto/input/updateSnippet.input';
 
 @Resolver(() => SnippetType)
 export class SnippetResolver {
@@ -43,8 +44,16 @@ export class SnippetResolver {
   @Mutation(() => DeleteSnippetType)
   public async deleteSnippet(
     @Args('deleteSnippetData', { type: () => DeleteSnippetInput })
-    deleteSnippetData: GetSnippetArgs,
-  ): Promise<GetSnippetArgs> {
+    deleteSnippetData: DeleteSnippetInput,
+  ): Promise<DeleteSnippetInput> {
     return this.snippetService.deleteSnippet(deleteSnippetData);
+  }
+
+  @Mutation(() => SnippetType)
+  public async updateSnippet(
+    @Args('updateSnippetData', { type: () => UpdateSnippetInput })
+    updateSnippetData: UpdateSnippetInput,
+  ): Promise<Snippet> {
+    return this.snippetService.updateSnippet(updateSnippetData);
   }
 }
