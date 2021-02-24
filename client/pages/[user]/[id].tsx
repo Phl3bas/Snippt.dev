@@ -46,9 +46,7 @@ export default function SnippetPage({ snippet }: SnippetPageProps) {
           value={data.content}
           onChange={setData}
         />
-        <textarea name="notes" id="notes">
-          {data.notes}
-        </textarea>
+        <textarea name="notes" id="notes" defaultValue={data.notes}></textarea>
         <input type="submit" onClick={handleSubmit} value="Save" />
       </form>
     </div>
