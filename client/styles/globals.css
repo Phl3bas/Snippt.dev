@@ -9,6 +9,7 @@ body {
 .CodeMirror {
   height: auto !important;
   z-index: 0;
+
   border-radius: var(--tl-radius-lg);
   padding: var(--tl-size-13) var(--tl-size-13);
   padding-top: var(--tl-size-15);

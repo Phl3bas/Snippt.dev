@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { SnippetList } from "../../components";
 import * as React from "react";
 import { useNestServer } from "../../utils";
@@ -11,7 +11,14 @@ export const All_SNIPPETS_QUERY = gql`
       title
       language
       id
-      content
+    }
+  }
+`;
+
+export const DELETE_SNIPPET_MUTATION = gql`
+  mutation($data: DeleteSnippetInput!) {
+    deleteSnippet(deleteSnippetData: $data) {
+      id
     }
   }
 `;
@@ -25,16 +32,34 @@ const Dashboard: React.FC<DashboardProps> = ({
   data: Snippet[];
   user: string;
 }) => {
+  const [deleteSnippet] = useMutation(DELETE_SNIPPET_MUTATION);
+
+  const handleDelete = (id: string) => {
+    deleteSnippet({
+      variables: {
+        data: {
+          id,
+        },
+      },
+    });
+  };
+
   return (
-    <div className="shadow-lg h-25 bg-teal-400 p-10 mt-16 radius-lg">
+    <div className="shadow-lg h-25 bg-indigo-500 p-10 mt-17 radius-lg">
       <Head>
         <title>Snippt.dev | {user}'s dashboard</title>
       </Head>
-      <h2>Welcome {user}</h2>
+      <h2 className="text-white-000">Welcome {user}</h2>
       <Link href={"/[...user]/new-snippet"} as={`/${user}/new-snippet`}>
-        <a role="button">New Snippet</a>
+        <a role="button" className="bg-indigo-400 text-white-000">
+          <span className="text-white-000">New Snippet</span>
+        </a>
       </Link>
-      <SnippetList user={user} snippets={data || []} />
+      <SnippetList
+        deleteHandler={handleDelete}
+        user={user}
+        snippets={data || []}
+      />
     </div>
   );
 };

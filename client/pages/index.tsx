@@ -7,7 +7,7 @@ export default function Home() {
         <title>Snippets!!!!</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
+      <div className="mt-20">
         <h1>Hello this is the homepage to snippt.dev</h1>
       </div>
     </div>

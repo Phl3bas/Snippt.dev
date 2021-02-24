@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useNestServer } from "../../utils";
@@ -16,18 +16,6 @@ export const INDV_SNIPPETS_QUERY = gql`
   }
 `;
 
-export const SAVE_SNIPPET_QUERY = gql`
-  mutation($data: CreateSnippetInput!) {
-    createSnippet(createSnippetData: $data) {
-      id
-      title
-      language
-      content
-      notes
-    }
-  }
-`;
-
 interface SnippetPageProps {
   snippet: Snippet;
 }
@@ -38,15 +26,13 @@ export default function SnippetPage({ snippet }: SnippetPageProps) {
     notes: snippet.notes,
   });
 
-  const [saveSnippet] = useMutation(SAVE_SNIPPET_QUERY);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(JSON.stringify(data, null, 2));
   };
 
   return (
-    <div>
+    <div className="mt-17">
       <Head>
         <title>Snippt.dev | {snippet.title}</title>
       </Head>
@@ -57,10 +43,12 @@ export default function SnippetPage({ snippet }: SnippetPageProps) {
       <form>
         <CodeEditor
           language={data.language.toLowerCase()}
-          theme="cobalt"
           value={data.content}
           onChange={setData}
         />
+        <textarea name="notes" id="notes">
+          {data.notes}
+        </textarea>
         <input type="submit" onClick={handleSubmit} value="Save" />
       </form>
     </div>
@@ -77,7 +65,10 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   return {
     props: {
-      snippet,
+      snippet: {
+        ...snippet,
+        content: JSON.parse(snippet.content),
+      },
     },
   };
 };

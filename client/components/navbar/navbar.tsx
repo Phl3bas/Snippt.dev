@@ -1,23 +1,21 @@
 import Link from "next/link";
-
-const routes = [
-  {
-    href: "/phl3bas",
-    text: "Dashboard",
-  },
-];
+import { useState } from "react";
 
 export const Navbar = () => {
   return (
     <nav
-      className="bg-teal-400 fixed w-screen h-15 flex-row alignitems-center px-20"
+      className="bg-indigo-400 fixed w-screen p-10 justifycontent-between flex-row"
       style={{ top: 0, left: 0, zIndex: 1000 }}
     >
-      {routes.map((route, i) => (
-        <Link key={i} href={route.href}>
-          <a role="button">{route.text}</a>
-        </Link>
-      ))}
+      <Link href="/[...user]" as={`/phl3bas`}>
+        <a role="button">login</a>
+      </Link>
+
+      <Link href="/">
+        <a className="mr-15 h-10" role="button">
+          Home
+        </a>
+      </Link>
     </nav>
   );
 };
