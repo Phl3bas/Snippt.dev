@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { CreateSnippetInput } from './dto/input/createSnippet.input';
 import { GetSnippetArgs } from './dto/args/get-snippet.args';
@@ -31,6 +31,22 @@ export class SnippetService {
     });
 
     return await this.snippetRepository.save(snippet);
+  }
+
+  /**
+   * name
+   */
+  public async deleteSnippet(
+    deleteSnippetData: GetSnippetArgs,
+  ): Promise<GetSnippetArgs> {
+    const result = await this.snippetRepository.delete(deleteSnippetData.id);
+    if (result.affected === 0) {
+      throw new NotFoundException(
+        `Task with ID: ${deleteSnippetData.id} Not Found!`,
+      );
+    }
+
+    return deleteSnippetData;
   }
 
   /**

@@ -3,8 +3,10 @@ import { Resolver } from '@nestjs/graphql';
 import { GetSnippetArgs } from './dto/args/get-snippet.args';
 import { GetSnippetsArgs } from './dto/args/get-snippets.args';
 import { CreateSnippetInput } from './dto/input/createSnippet.input';
+import { DeleteSnippetInput } from './dto/input/deleteSnippetInput';
 import { Snippet } from './entities/snippet.entity';
 import { SnippetType } from './models/snippet.type';
+import { DeleteSnippetType } from './models/deleteSnippet.type';
 import { SnippetService } from './snippet.service';
 
 @Resolver(() => SnippetType)
@@ -36,5 +38,13 @@ export class SnippetResolver {
     createSnippetData: CreateSnippetInput,
   ): Promise<Snippet> {
     return this.snippetService.createSnippet(createSnippetData);
+  }
+
+  @Mutation(() => DeleteSnippetType)
+  public async deleteSnippet(
+    @Args('deleteSnippetData', { type: () => DeleteSnippetInput })
+    deleteSnippetData: GetSnippetArgs,
+  ): Promise<GetSnippetArgs> {
+    return this.snippetService.deleteSnippet(deleteSnippetData);
   }
 }
