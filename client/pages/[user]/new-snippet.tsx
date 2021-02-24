@@ -61,13 +61,18 @@ const NewSnippet: React.FC<NewSnippetProps> = ({ user }) => {
 
   return (
     <div className="mt-17">
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        className="w-2/3 mx-auto bg-white-000 p-14 radius-lg shadow-2xl min-h-25"
+      >
+        <label htmlFor="Title">Title</label>
         <input onChange={handleChange} type="text" name="title" id="title" />
         <CodeEditor
           language={data.language}
           value={data.content}
           onChange={setData}
         />
+        <label htmlFor="Notes">Notes</label>
         <textarea onChange={handleChange} name="notes" id="notes"></textarea>
         <input type="submit" value="Save" />
       </form>

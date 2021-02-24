@@ -17,3 +17,7 @@ body {
   margin: 0 auto;
   font-size: var(--tl-size-12);
 }
+
+.hover-none {
+  --tl-button-hover: none;
+}
