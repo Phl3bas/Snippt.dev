@@ -2,17 +2,8 @@ import { gql, useMutation } from "@apollo/client";
 import { useState } from "react";
 import { CodeEditor } from "../../components";
 import { useRouter } from "next/router";
+import SAVE_SNIPPET_QUERY from '../../graphql/mutations/createSnippet'
 
-export const SAVE_SNIPPET_QUERY = gql`
-  mutation($data: CreateSnippetInput!) {
-    createSnippet(createSnippetData: $data) {
-      title
-      language
-      content
-      notes
-    }
-  }
-`;
 
 export interface NewSnippetProps {
   user: string;
@@ -43,7 +34,7 @@ const NewSnippet: React.FC<NewSnippetProps> = ({ user }) => {
         data: {
           title: data.title,
           language: data.language,
-          content: JSON.stringify(data.content, null, 2),
+          content: data.content,
           notes: data.notes,
         },
       },

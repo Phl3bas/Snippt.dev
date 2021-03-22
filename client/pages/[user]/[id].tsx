@@ -1,52 +1,58 @@
-import { gql } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import { useNestServer } from "../../utils";
 import { CodeEditor } from "../../components";
 import { useState } from "react";
+import { initializeApollo } from "../../lib/apolloClient";
+import { useRouter } from "next/router";
+import GET_SNIPPET_QUERY from '../../graphql/queries/getSnippetQuery'
+import UPDATE_SNIPPET_MUTATION from '../../graphql/mutations/updateSnippet'
 
-export const INDV_SNIPPETS_QUERY = gql`
-  query($id: String!) {
-    snippet(id: $id) {
-      title
-      content
-      language
-      notes
-    }
-  }
-`;
-
-interface SnippetPageProps {
-  snippet: Snippet;
-}
-export default function SnippetPage({ snippet }: SnippetPageProps) {
-  const [data, setData] = useState({
-    content: snippet.content,
-    language: snippet.language,
-    notes: snippet.notes,
+export default function SnippetPage({id}) {
+  const { data, loading, error}  = useQuery(GET_SNIPPET_QUERY, {variables: {id}})
+  const [updateSnippet] = useMutation(UPDATE_SNIPPET_MUTATION)
+  const router = useRouter()
+  const [editorData, setEditorData] = useState({
+    title: data.snippet.title,
+    content: data.snippet.content,
+    language: data.snippet.language,
+    notes: data.snippet.notes,
   });
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(JSON.stringify(data, null, 2));
+    updateSnippet({variables: {data: {
+      id,
+      content: JSON.stringify(editorData.content),
+      ...editorData
+    }}}).then((data)=> router.push('/[...user]', '/phl3bas')).catch((err)=> alert({'error': err}))
   };
+
+
+  
+
+  const handleChange = (e) => {
+    e.persist();
+    setEditorData((prev)=>({...prev, notes: e.target.value}))
+  }
 
   return (
     <div className="mt-17">
       <Head>
-        <title>Snippt.dev | {snippet.title}</title>
+        <title>Snippt.dev | {editorData.title}</title>
       </Head>
-      <h1>{snippet.title}</h1>
+      <h1>{data.snippet.title}</h1>
       <p>
-        {snippet.language.charAt(0).toUpperCase() + snippet.language.slice(1)}
+        {editorData.language.charAt(0).toUpperCase() + editorData.language.slice(1)}
       </p>
       <form>
         <CodeEditor
-          language={data.language.toLowerCase()}
-          value={data.content}
-          onChange={setData}
+          language={editorData.language.toLowerCase()}
+          value={editorData.content}
+          onChange={setEditorData}
         />
-        <textarea name="notes" id="notes" defaultValue={data.notes}></textarea>
+        <textarea name="notes" id="notes"defaultValue={editorData.notes} onChange={handleChange}></textarea>
         <input type="submit" onClick={handleSubmit} value="Save" />
       </form>
     </div>
@@ -54,19 +60,18 @@ export default function SnippetPage({ snippet }: SnippetPageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const { snippet } = await useNestServer<{ snippet: Snippet }>(
-    INDV_SNIPPETS_QUERY,
-    {
-      id: params.id,
-    }
-  );
+ 
+    const apolloClient =  initializeApollo()
+
+    await apolloClient.query({query: GET_SNIPPET_QUERY, variables: {
+      id: params.id
+    }})
+
 
   return {
     props: {
-      snippet: {
-        ...snippet,
-        content: JSON.parse(snippet.content),
-      },
+      initialApolloState: apolloClient.cache.extract(),
+      id: params.id
     },
   };
 };
