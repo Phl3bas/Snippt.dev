@@ -5,8 +5,8 @@ import { GetSnippetsArgs } from './dto/args/get-snippets.args';
 import { CreateSnippetInput } from './dto/input/createSnippet.input';
 import { DeleteSnippetInput } from './dto/input/deleteSnippetInput';
 import { Snippet } from './entities/snippet.entity';
-import { SnippetType } from './models/snippet.type';
-import { DeleteSnippetType } from './models/deleteSnippet.type';
+import { SnippetType } from './graphql/snippet.type';
+import { DeleteSnippetType } from './graphql/deleteSnippet.type';
 import { SnippetService } from './snippet.service';
 import { UpdateSnippetInput } from './dto/input/updateSnippet.input';
 

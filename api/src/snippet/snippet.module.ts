@@ -7,5 +7,6 @@ import { SnippetService } from './snippet.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Snippet])],
   providers: [SnippetService, SnippetResolver],
+  exports: [TypeOrmModule]
 })
 export class SnippetModule {}
