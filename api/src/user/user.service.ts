@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/inputs/create-user.input';
@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import {v4 as uuid} from 'uuid'
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { GetUserArgs } from './dto/args/get-user.args';
+import { DeleteUserInput } from './dto/inputs/delete-user.input';
 
 @Injectable()
 export class UserService {
@@ -39,5 +40,18 @@ export class UserService {
         })
 
         return this.userRepository.save(user);
+    }
+
+
+    public async deleteUser(deleteUserInput: DeleteUserInput): Promise<DeleteUserInput> {
+        const result = await this.userRepository.delete(deleteUserInput.id);
+        console.log(await result);
+        if (result.affected === 0) {
+          throw new NotFoundException(
+            `Snippet with ID: ${deleteUserInput.id} Not Found!`,
+          );
+        }
+    
+        return deleteUserInput;
     }
 }
