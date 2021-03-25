@@ -5,6 +5,7 @@ import { CreateUserInput } from './dto/inputs/create-user.input';
 import { User } from './entities/user.entity';
 import {v4 as uuid} from 'uuid'
 import { GetUsersArgs } from './dto/args/get-users.args';
+import { GetUserArgs } from './dto/args/get-user.args';
 
 @Injectable()
 export class UserService {
@@ -17,6 +18,9 @@ export class UserService {
             }
         })
         
+    }
+    public async getUserById({id}: GetUserArgs):Promise<User> {
+        return await this.userRepository.findOne({id});
     }
 
     public async getUsers({ids}: GetUsersArgs): Promise<User[]>{
