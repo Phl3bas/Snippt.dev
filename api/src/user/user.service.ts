@@ -45,7 +45,7 @@ export class UserService {
 
     public async deleteUser(deleteUserInput: DeleteUserInput): Promise<DeleteUserInput> {
         const result = await this.userRepository.delete(deleteUserInput.id);
-        console.log(await result);
+
         if (result.affected === 0) {
           throw new NotFoundException(
             `Snippet with ID: ${deleteUserInput.id} Not Found!`,
